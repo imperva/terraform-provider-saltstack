@@ -12,10 +12,9 @@
 name: Saltstack Terraform Provider Release
 on:
   push:
-    branches:
-      - master
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+*'
+
 permissions:
   contents: write
 
@@ -26,6 +25,10 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
+      - 
+        name: Do not release if not master branch
+        if: endsWith(github.ref, 'master') == false
+        run: exit -1
       -
         name: Unshallow
         run: git fetch --prune --unshallow
@@ -50,5 +53,4 @@ jobs:
           args: release --rm-dist
         env:
           GPG_FINGERPRINT: ${{ steps.import_gpg.outputs.fingerprint }}
-          # GitHub sets this automatically
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
