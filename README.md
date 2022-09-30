@@ -55,9 +55,7 @@ resource saltstack_minion_key_pair few_minion_keys {
     key_size = 2048
 }
 ```
-
-For a more complex example, see the `example` folder.
-
+  
 ## Developing the Provider
 
 If you wish to work on the provider, you need [Go](http://www.golang.org) installed on your machine (see [Requirements](#requirements) above).
