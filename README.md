@@ -41,7 +41,7 @@ provider saltstack {
     host            = "10.20.30.40"
     port            =  8000
     username        =  "saltstack-api-user"
-	  password        =  "strongpassword"
+    password        =  "strongpassword"
 }
 
 resource saltstack_minion_key_pair single_minion_key {
