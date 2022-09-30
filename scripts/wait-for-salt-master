@@ -1,0 +1,19 @@
+#!/bin/sh
+
+TIMEOUT=300
+TIMEOUT_END=$(($(date +%s) + TIMEOUT))
+
+while :; do
+    echo "Probing $1..."
+    wget --timeout=1 -q "$1" -O /dev/null > /dev/null 2>&1 
+
+    result=$?
+    if [ $result -eq 0 ] ; then
+        exit 0
+    fi
+    if [ $TIMEOUT -ne 0 -a $(date +%s) -ge $TIMEOUT_END ]; then
+        echo "Timeout exceeded. Salt-Master didn't get up within $TIMEOUT seconds." >&2
+        exit 1
+    fi
+    sleep 1
+done

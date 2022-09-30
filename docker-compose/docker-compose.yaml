@@ -1,0 +1,14 @@
+version: "3.7"
+services:
+  salt-master:
+    image: saltstack/salt:${SALTSTACK_VER}
+    ports:
+      - 8000:8000
+    environment:
+      - SALT_API_CONFIG={"log_level":"debug","rest_cherrypy":{"host":"0.0.0.0","port":8000,"disable_ssl":true},"external_auth":{"sharedsecret":{"username":["@wheel"]}},"sharedsecret":"$SALTSTACK_PASSWORD"}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 5s

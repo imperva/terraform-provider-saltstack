@@ -1,0 +1,7 @@
+{
+    "name": "saltstack",
+    "hostname": "registry.terraform.io",
+    "namespace": "imperva",
+    "version": "0.1.1",
+    "description": "Terraform provider for Saltstack"
+}
