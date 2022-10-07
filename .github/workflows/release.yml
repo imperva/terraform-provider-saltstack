@@ -28,7 +28,10 @@ jobs:
         uses: actions/checkout@v3
       -
         name: print github ref
-        run: echo "REF - ${{github.ref}}"
+        run: echo "REF - ${{github.event}}"
+      -
+        name: print github event
+        run: echo "REF - ${{github}}"
       - 
         name: Do not release if not master branch
         if: github.ref == 'refs/heads/master'
