@@ -20,15 +20,12 @@ permissions:
 
 jobs:
   goreleaser:
+    if: github.event.base_ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       -
         name: Checkout
         uses: actions/checkout@v3
-      - 
-        name: Do not release if not master branch
-        if: endsWith(github.ref, 'master') == false
-        run: exit -1
       -
         name: Unshallow
         run: git fetch --prune --unshallow
