@@ -25,6 +25,9 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
+      -
+        name: print github ref
+        run: echo "REF - ${{github.ref}}"
       - 
         name: Do not release if not master branch
         if: endsWith(github.ref, 'master') == false
