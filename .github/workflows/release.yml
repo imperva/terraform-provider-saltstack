@@ -30,7 +30,7 @@ jobs:
         run: echo "REF - ${{github.ref}}"
       - 
         name: Do not release if not master branch
-        if: endsWith(github.ref, 'master') == false
+        if: github.ref == 'refs/heads/master'
         run: exit -1
       -
         name: Unshallow
