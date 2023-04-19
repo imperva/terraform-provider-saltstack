@@ -20,7 +20,6 @@ permissions:
 
 jobs:
   goreleaser:
-    if: github.event.base_ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       -
