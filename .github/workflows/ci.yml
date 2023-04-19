@@ -1,7 +1,10 @@
 name: Saltstack Terraform Provider CI Tests
 
 on:
-  - pull_request
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 permissions:
   contents: read
