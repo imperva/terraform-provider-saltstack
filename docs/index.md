@@ -25,7 +25,7 @@ description: |-
 ### Optional
 
 - `debug` (Boolean) Run provider in DEBUG mode. Defaults to `false`
-- `eauth` (String) Salt Master API External Authentication system. Currently supports: `pam`, `sharedsecret`. Reference: https://docs.saltproject.io/en/latest/topics/eauth/index.html. Defaults to `pam`
+- `eauth` (String) Salt Master API External Authentication system. Currently supports: `pam`, `file`, `sharedsecret`. Reference: https://docs.saltproject.io/en/latest/topics/eauth/index.html. Defaults to `pam`
 - `scheme` (String) Connection scheme. Can be http or https. Defaults to `https`.
 - `ssl_skip_verify` (Boolean) Skip SSL verification. Defaults to `false`
 - `token` (String) Authentication token if `use_token` is true.

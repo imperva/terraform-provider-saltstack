@@ -46,7 +46,7 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("SALTSTACK_EAUTH", "pam"),
-				Description: "Salt Master API External Authentication system. Currently supports: `pam`, `sharedsecret`. Reference: https://docs.saltproject.io/en/latest/topics/eauth/index.html. Defaults to `pam`",
+				Description: "Salt Master API External Authentication system. Currently supports: `pam`, `file`, `sharedsecret`. Reference: https://docs.saltproject.io/en/latest/topics/eauth/index.html. Defaults to `pam`",
 			},
 			"use_token": {
 				Type:        schema.TypeBool,
