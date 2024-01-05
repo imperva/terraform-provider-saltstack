@@ -20,6 +20,20 @@ func TestValidClientWithAllRequiredConfig_pam(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestValidClientWithAllRequiredConfig_file(t *testing.T) {
+	config := Config{
+		Host:     "localhost",
+		Port:     8000,
+		Username: "username",
+		Password: "password",
+		Eauth:    "file",
+	}
+
+	client, err := NewClient(config)
+	assert.NotNil(t, client)
+	assert.NoError(t, err)
+}
+
 func TestValidClientWithAllRequiredConfig_sharedsecret(t *testing.T) {
 	config := Config{
 		Host:     "localhost",
