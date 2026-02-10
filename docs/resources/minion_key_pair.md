@@ -21,6 +21,7 @@ description: |-
 
 ### Optional
 
+- `force` (Boolean) If set to True, it will overwrite existing keys for the same ID.
 - `key_size` (Number) The size of the key pair to generate. The size must be 2048, which is the default, or greater. If set to a value less than 2048, the key size will be rounded up to 2048.
 
 ### Read-Only

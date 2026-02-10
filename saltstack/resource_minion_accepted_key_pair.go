@@ -64,6 +64,13 @@ func resourceMinionAcceptedKeyPair() *schema.Resource {
 				Default:     2048,
 				ForceNew:    true,
 			},
+			"force": {
+				Type:        schema.TypeBool,
+				Optional:    true,
+				Description: "If set to True, it will overwrite existing keys for the same ID.",
+				Default:     false,
+				ForceNew:    true,
+			},
 			"private_key": {
 				Type:        schema.TypeString,
 				Computed:    true,
@@ -90,12 +97,14 @@ func resourceMinionAcceptedKeyPairCreate(ctx context.Context, d *schema.Resource
 
 	minionId := d.Get("minion_id").(string)
 	keySize := d.Get("key_size").(int)
+	force := d.Get("force").(bool)
 
 	reqData := map[string]interface{}{
 		"client":  "wheel",
 		"fun":     "key.gen_accept",
 		"id_":     minionId,
 		"keysize": keySize,
+		"force":   force,
 	}
 
 	tflog.Debug(ctx, fmt.Sprintf("Creating key pair for minion %s", minionId), nil)
