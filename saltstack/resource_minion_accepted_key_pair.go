@@ -67,7 +67,7 @@ func resourceMinionAcceptedKeyPair() *schema.Resource {
 			"force": {
 				Type:        schema.TypeBool,
 				Optional:    true,
-				Description: "If set to True, it will overwrite existing keys for the same ID.",
+				Description: "If set to True, it will overwrite existing keys for the same ID. A previously accepted key will be overwritten and will result in the minion being unable to connect.",
 				Default:     false,
 				ForceNew:    true,
 			},
