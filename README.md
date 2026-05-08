@@ -13,7 +13,8 @@ See: [Official documentation](https://registry.terraform.io/providers/imperva/sa
 - [Go](https://golang.org/doc/install) >= 1.19
 
 ## Supported Salt Master versions
-The provider is tested with versions `3005`, `3004.2`, `3004.1`, `3004.1`, `3004`, `3003.5"`, `3003.4`, `3003.3`, `3003.2`, `3003.1`, `3003`, `3002.9`, `3002.8`, `3002.7`, `3002.6`, `3002.5`, `3002.4`, `3002.3`, `3002.2`, `3002.1`, `3002`. It is also possible to work with older versions.
+The provider is tested with versions `3006.0`, `3006.1`, `3006.10`, `3006.11`, `3006.12`, `3006.13`, `3006.14`, `3006.15`, `3006.16`, `3006.17`, `3006.18`, `3006.19`, `3006.2`, `3006.20`, `3006.21`, `3006.22`, `3006.23`, `3006.24`, `3006.3`, `3006.4`, `3006.5`, `3006.6`, `3006.7`, `3006.8`, `3006.9`, `3007.0`, `3007.1`, `3007.10`, `3007.11`, `3007.12`, `3007.13`, `3007.14`, `3007.2`, `3007.3`, `3007.4`, `3007.5`, `3007.6`, `3007.7`, `3007.8`, `3007.9`, `3005`, `3004.2`, `3004.1`, `3004`. Versions 3006.0 and newer are bootstrapped from Broadcom onedir artifacts. Older versions use the legacy `saltstack/salt` container image.
+
 ## Building The Provider
 
 1. Clone the repository
