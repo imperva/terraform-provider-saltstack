@@ -5,7 +5,7 @@ TIMEOUT_END=$(($(date +%s) + TIMEOUT))
 
 while :; do
     echo "Probing $1..."
-    wget --timeout=1 -q "$1" -O /dev/null > /dev/null 2>&1 
+    wget --timeout=1 -q "$1" -O - 2> /dev/null | jq -e '.return == "Welcome"' > /dev/null 2>&1
 
     result=$?
     if [ $result -eq 0 ] ; then

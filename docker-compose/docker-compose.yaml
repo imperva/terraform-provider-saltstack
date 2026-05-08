@@ -1,14 +1,67 @@
-version: "3.7"
 services:
   salt-master:
-    image: saltstack/salt:${SALTSTACK_VER}
+    image: ubuntu:24.04
+    platform: ${SALTSTACK_PLATFORM:-linux/amd64}
     ports:
       - 8000:8000
     environment:
-      - SALT_API_CONFIG={"log_level":"debug","rest_cherrypy":{"host":"0.0.0.0","port":8000,"disable_ssl":true},"external_auth":{"sharedsecret":{"username":["@wheel"]}},"sharedsecret":"$SALTSTACK_PASSWORD"}
+      SALTSTACK_VER: ${SALTSTACK_VER:-3006.0}
+      SALTSTACK_PASSWORD: ${SALTSTACK_PASSWORD:-password}
+      SALTSTACK_ARCH: ${SALTSTACK_ARCH:-x86_64}
+      SALTSTACK_ARTIFACTORY_URL: ${SALTSTACK_ARTIFACTORY_URL:-https://packages.broadcom.com/artifactory}
+    command:
+      - /bin/bash
+      - -lc
+      - |
+        set -euo pipefail
+
+        export DEBIAN_FRONTEND=noninteractive
+        apt-get update
+        apt-get install -y --no-install-recommends ca-certificates curl xz-utils procps python3
+
+        salt_tarball="salt-$${SALTSTACK_VER}-onedir-linux-$${SALTSTACK_ARCH}.tar.xz"
+        salt_url="$${SALTSTACK_ARTIFACTORY_URL}/saltproject-generic/onedir/$${SALTSTACK_VER}/$${salt_tarball}"
+
+        mkdir -p /opt/saltstack /etc/salt/master.d /srv/salt /srv/pillar /var/log/salt
+        curl -fsSL "$${salt_url}" -o "/tmp/$${salt_tarball}"
+        tar -xJf "/tmp/$${salt_tarball}" -C /opt/saltstack
+
+        if [ -x /opt/saltstack/salt/bin/salt-master ]; then
+          salt_bin=/opt/saltstack/salt/bin
+        else
+          salt_bin=/opt/saltstack/salt
+        fi
+
+        cat >/etc/salt/master <<EOF
+        interface: 0.0.0.0
+        log_level: debug
+        netapi_enable_clients:
+          - wheel
+        rest_cherrypy:
+          host: 0.0.0.0
+          port: 8000
+          disable_ssl: true
+        external_auth:
+          sharedsecret:
+            username:
+              - '@wheel'
+        sharedsecret: $${SALTSTACK_PASSWORD}
+        file_roots:
+          base:
+            - /srv/salt
+        pillar_roots:
+          base:
+            - /srv/pillar
+        EOF
+
+        $${salt_bin}/salt-master --version
+        $${salt_bin}/salt-api --version
+
+        $${salt_bin}/salt-master -d
+        exec $${salt_bin}/salt-api -l debug
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/"]
       interval: 10s
       timeout: 10s
       retries: 10
-      start_period: 5s
+      start_period: 30s

@@ -21,6 +21,8 @@ export SALTSTACK_EAUTH=sharedsecret
 export SALTSTACK_USERNAME=username
 export SALTSTACK_PASSWORD=password
 
+SALTSTACK_COMPOSE_FILE=$(shell awk 'BEGIN { split("$(SALTSTACK_VER)", v, "."); print (v[1] < 3006 ? "docker-compose/docker-compose-pre-3006.yaml" : "docker-compose/docker-compose.yaml") }')
+
 default: install
 
 build:
@@ -54,14 +56,14 @@ fmtcheck:
 
 salt-master-up:
 	@echo "Starting up Salt-Master $(SALTSTACK_VER)..."
-	docker-compose -f docker-compose/docker-compose.yaml up --remove-orphans -d
-	docker-compose -f docker-compose/docker-compose.yaml logs
-	scripts/wait-for-salt-master localhost:8000
+	docker compose -f $(SALTSTACK_COMPOSE_FILE) up --remove-orphans -d
+	docker compose -f $(SALTSTACK_COMPOSE_FILE) logs --tail=100 salt-master
+	scripts/wait-for-salt-master $(SALTSTACK_SCHEME)://$(SALTSTACK_HOST):$(SALTSTACK_PORT)
 	@echo "Salt-Master $(SALTSTACK_VER) is up and running."
 
 salt-master-down:
 	@echo "Shutting down Salt-Master $(SALTSTACK_VER)..."
-	docker-compose -f docker-compose/docker-compose.yaml down --volumes
+	docker compose -f $(SALTSTACK_COMPOSE_FILE) down --volumes
 	@echo "Salt-Master $(SALTSTACK_VER) is down."
 
 #! Development 
