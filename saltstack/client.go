@@ -45,7 +45,7 @@ type LoginReadResult struct {
 }
 
 func NewClient(config Config) (*Client, error) {
-	supportedAuthTypesKeys := [...]string{"pam", "sharedsecret"}
+	supportedAuthTypesKeys := [...]string{"pam", "file", "sharedsecret"}
 
 	supportedAuthTypes := map[string]bool{}
 	for _, t := range supportedAuthTypesKeys {
