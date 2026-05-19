@@ -2,6 +2,7 @@ package saltstack
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
@@ -31,6 +32,40 @@ func TestAccSaltstackMinionKeyPair_basic(t *testing.T) {
 	})
 }
 
+func TestAccSaltstackMinionKeyPair_overwrite(t *testing.T) {
+	minionId := "test-1.domain.com"
+	keySize := 2048
+	resourceName := "saltstack_minion_key_pair.test"
+	resourceNameForced := "saltstack_minion_key_pair.forced"
+
+	resource.Test(t, resource.TestCase{
+		PreCheck:     func() { testAccPreCheck(t) },
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckSaltstackMinionKeyPairDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: testAccCheckSaltstackMinionKeyPairConfigBasic(minionId, keySize),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckSaltstackMinionKeyPairExists(resourceName),
+					testAccCheckSaltstackMinionPrivateKey(resourceName),
+					testAccCheckSaltstackMinionPublicKey(resourceName),
+				),
+			},
+			{
+				Config: strings.Join([]string{
+					testAccCheckSaltstackMinionKeyPairConfigBasic(minionId, keySize),
+					testAccCheckSaltstackMinionKeyPairConfigForced(minionId, keySize, true),
+				}, "\n"),
+				Check: resource.ComposeTestCheckFunc(
+					testAccCheckSaltstackMinionKeyPairExists(resourceNameForced),
+					testAccCheckSaltstackMinionPrivateKey(resourceNameForced),
+					testAccCheckSaltstackMinionPublicKey(resourceNameForced),
+				),
+			},
+		},
+	})
+}
+
 func testAccCheckSaltstackMinionKeyPairConfigBasic(minion_id string, key_size int) string {
 	return fmt.Sprintf(`
 	resource saltstack_minion_key_pair test {
@@ -38,6 +73,16 @@ func testAccCheckSaltstackMinionKeyPairConfigBasic(minion_id string, key_size in
 		key_size = %d
 	}
 	`, minion_id, key_size)
+}
+
+func testAccCheckSaltstackMinionKeyPairConfigForced(minion_id string, key_size int, force bool) string {
+	return fmt.Sprintf(`
+    resource saltstack_minion_key_pair forced {
+		minion_id = "%s"
+		key_size = %d
+		force = %t
+	}
+	`, minion_id, key_size, force)
 }
 
 func testAccCheckSaltstackMinionKeyPairExists(resourceName string) resource.TestCheckFunc {
